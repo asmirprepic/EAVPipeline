@@ -1,5 +1,13 @@
 namespace EAVPipeline.Core.Models;
 
+public enum AttributeDataType{
+    String, 
+    Double, 
+    Integer, 
+    Boolean,
+    DateTime
+}
+
 public class AttributeDefinition{
     public string Slug {get; set;} = null;
     public string DisplayName {get; set;} = null;

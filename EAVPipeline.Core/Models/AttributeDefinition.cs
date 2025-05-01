@@ -9,12 +9,12 @@ public enum AttributeDataType{
 }
 
 public class AttributeDefinition{
-    public string Slug {get; set;} = null;
-    public string DisplayName {get; set;} = null;
-    public Type DataType {get; set;} = typeof(String);
-    public bool Required {get; set;} 
-    public bool IsEnum {get;set;}
-    public List<string> ? EnumOptions {get;set;}
+    public string Slug { get; set; } = null!;
+    public string DisplayName { get; set; } = null!;
+    public AttributeDataType DataType { get; set; } = AttributeDataType.String;
+    public bool Required { get; set; }
+    public bool IsEnum { get; set; }
+    public List<string>? EnumOptions { get; set; }
 }
 
 

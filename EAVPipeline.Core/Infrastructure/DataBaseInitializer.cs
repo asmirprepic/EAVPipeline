@@ -1,13 +1,16 @@
 using System.Data.SQLite;
 namespace EAVPipeline.Core.Infrastructure;
+using Dapper;
+
 
 public static class DataBaseInitializer {
     public static void EnsureSchema(SQLiteConnection connection){
+        
         var command = connection.CreateCommand();
         command.CommandText = @"
-        CRATE TABLE IF NOT EXISTS AttributeDefinitions (
+        CREATE TABLE IF NOT EXISTS AttributeDefinitions (
         AttributeId INTEGER PRIMARY KEY AUTOINCREMENT,
-        Slug TEXT NOT NULL UNIQE,
+        Slug TEXT NOT NULL UNIQUE,
         DisplayName TEXT NOT NULL,
         DataType TEXT NOT NULL, 
         Required BOOLEAN NOT NULL,
@@ -24,6 +27,7 @@ public static class DataBaseInitializer {
 
         CREATE TABLE IF NOT EXISTS AttributeValues (
         Id INTEGER PRIMARY KEY AUTOINCREMENT,
+        AttributeId INTEGER NOT NULL,
         EntityId INTEGER NOT NULL,
         Value TEXT, 
         FOREIGN KEY (AttributeId) References AttributeDefinitions (AttributeId)

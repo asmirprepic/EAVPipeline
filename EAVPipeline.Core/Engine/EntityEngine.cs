@@ -8,7 +8,9 @@ namespace EAVPipeline.Core.Engine;
 public class EntityEngine
 {
     public int EntityId {get;set;}
-    public string EntityType {get;set;} = null;
+    public string EntityType {get;set;} = string.Empty;
+    public List<AttributeEnumOption> EnumOptions { get; set; } = new();
+
     public Dictionary<string,object?> Values {get;set;} = new();
     public List<AttributeDefinition> Definitions {get;set;} = new();
 
@@ -33,18 +35,28 @@ public class EntityEngine
             if (val != null && val.GetType() != GetClrType(def.DataType))
                 throw new Exception($"Attribute '{def.Slug}' has invalid type. Expected {GetClrType(def.DataType).Name}, got {val.GetType().Name}.");
 
-            if (def.IsEnum && def.EnumOptions != null && !def.EnumOptions.Contains(val?.ToString()))
+            if (def.IsEnum && def.EnumOptions != null && !def.EnumOptions.Contains(val?.ToString()?? string.Empty))
                 throw new Exception($"'{val}' is not a valid enum value for '{def.Slug}'.");
         
 
         }
     }
 
-    public void Save(IDbConnection connection){
-        foreach (var pair in Values){
-            connection.Execute("INSERT INTO AttributeValues (EntityId, AttributeSlug, Value) VALUES (@EntityId, @Slug, @Value)",
-            new {EntityId, Slug = pair.Key,Value = pair.Value?.ToString()});
+    public void Save(IDbConnection connection)
+    {
+        foreach (var pair in Values)
+        {
+            var definition = Definitions.FirstOrDefault(d => d.Slug == pair.Key);
+            if (definition == null)
+                throw new Exception($"Definition for attribute '{pair.Key}' not found.");
 
+            int attributeId = connection.QueryFirst<int>(
+                "SELECT AttributeId FROM AttributeDefinitions WHERE Slug = @Slug",
+                new { Slug = pair.Key });
+
+            connection.Execute(
+                "INSERT INTO AttributeValues (EntityId, AttributeId, Value) VALUES (@EntityId, @AttributeId, @Value)",
+                new { EntityId, AttributeId = attributeId, Value = pair.Value?.ToString() });
         }
     }
 

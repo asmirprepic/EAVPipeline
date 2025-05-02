@@ -3,32 +3,33 @@ using Dapper;
 using EAVPipeline.Core.Models;
 
 namespace EAVPipeline.Core.Repositories;
-public static class DefititionRepository{
+
+public static class DefinitionRepository{
   public static void InsertDefinitionIfMissing(SQLiteConnection connection,AttributeDefinition def){
-    var exists = connection.ExecuteScalar<int>(
-        "SELECT COUNT(*) FROM AttributeDefinition WHERE Slug = @Slug",
-        new {def.Slug} )>0;
+    int exists = connection.ExecuteScalar<int>(
+        "SELECT COUNT(*) FROM AttributeDefinitions WHERE Slug = @Slug",
+        new {def.Slug} );
     
-    if(!exists){
+    if(exists == 0){
         connection.Execute(@"
-        INSERT INTO AttibuteDefinitions (Slug, DisplayName,DataType,Required,IsEnum)
+        INSERT INTO AttributeDefinitions (Slug, DisplayName,DataType,Required,IsEnum)
         Values (@Slug,@DisplayName,@DataType,@Required,@IsEnum)
         ",def);
     }
   }
 
   public static int GetAttributeIdBySlug(SQLiteConnection connection, string slug) =>
-  connection.QueryFirst<int>("SELECT AttributeId FROM AttributeDefinitions WHERE Slug = @Slug",new {slug}  );
+  connection.QueryFirst<int>("SELECT AttributeId FROM AttributeDefinitions WHERE Slug = @slug",new {slug}  );
 
   public static void InsertEnumOptionIfMissing(SQLiteConnection connection,int attributeId,string value){
-    var exists = connection.ExecuteScalar<int>(
+    int exists = connection.ExecuteScalar<int>(
         "SELECT COUNT(*) FROM AttributeEnumOptions WHERE AttributeId = @AttributeId AND Value = @Value",
-        new {AttributeId = attributeId,Value= value}) >0 ;
+        new {AttributeId = attributeId,Value= value})  ;
 
-    if (!exists){
+    if (exists == 0){
         connection.Execute(
             "INSERT INTO AttributeEnumOptions (AttributeId,Value) VALUES (@AttributeId,@Value)",
-            new {AttributeId = attributeId,Value = value})>0;
+            new {AttributeId = attributeId,Value = value});
     }
   }
 

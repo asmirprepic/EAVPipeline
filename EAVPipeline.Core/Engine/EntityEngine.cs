@@ -42,23 +42,47 @@ public class EntityEngine
         }
     }
 
-    public void Save(IDbConnection connection)
-    {
-        foreach (var pair in Values)
-        {
+    public void Save(IDbConnection connection){
+        foreach(var pair in Values){
             var definition = Definitions.FirstOrDefault(d => d.Slug == pair.Key);
             if (definition == null)
-                throw new Exception($"Definition for attribute '{pair.Key}' not found.");
-
+                throw new Exception($"Definition for new attribute '{pair.Key} not found.'");
+            
             int attributeId = connection.QueryFirst<int>(
                 "SELECT AttributeId FROM AttributeDefinitions WHERE Slug = @Slug",
-                new { Slug = pair.Key });
+                new {Slug = pair.Key});
+            
+            var existing = connection.QueryFirstOrDefault<string?>(
+                "SELECT Value FROM AttributeValues WHERE EntityId = @EntityId AND AttributeId = @AttributeId AND ArchivedAt IS NULL",
+            new {EntityId,AttributeId = attributeId});
 
-            connection.Execute(
-                "INSERT INTO AttributeValues (EntityId, AttributeId, Value) VALUES (@EntityId, @AttributeId, @Value)",
-                new { EntityId, AttributeId = attributeId, Value = pair.Value?.ToString() });
+            string? newVal = pair.Value?.ToString();
+
+            if (existing != null){
+                if (existing != newVal){
+                    connection.Execute(
+                        "UPDATE AttributeValues SET ArchivedAt = CURRENT_TIMESTAMP WHERE EntityId = @EntityId AND AttributeID = @AttributeId AND ArchivedAt IS NULL",
+                    new{EntityId, AttributeId = attributeId});
+
+                    connection.Execute(
+                        "INSERT INTO AttributeValues (EntityId, AttributeId, Value, ArchivedAt) VALUES (@EntityId, @AttributeId, @Value, NULL)",
+                        new { EntityId, AttributeId = attributeId, Value = newVal });
+                }
+            }
+
+            else {
+
+                connection.Execute(
+                    "INSERT INTO AttributeValues (EntityId, AttributeId, Value, ArchivedAt) VALUES (@EntityId,@AttributeId,@Value,NULL)",
+                new {EntityId, AttributeId = attributeId,Value = newVal});
+            }
+
+            
+
+            
         }
     }
+
 
 
 }

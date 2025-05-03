@@ -30,6 +30,7 @@ public static class DataBaseInitializer {
         AttributeId INTEGER NOT NULL,
         EntityId INTEGER NOT NULL,
         Value TEXT, 
+        ArchivedAt TEXT,
         FOREIGN KEY (AttributeId) References AttributeDefinitions (AttributeId)
         );
         ";

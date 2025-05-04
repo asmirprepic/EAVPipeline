@@ -9,7 +9,7 @@ public class EntityEngine
 {
     public int EntityId {get;set;}
     public string EntityType {get;set;} = string.Empty;
-    public List<AttributeEnumOption> EnumOptions { get; set; } = new();
+    //public List<AttributeEnumOption> EnumOptions { get; set; } = new();
 
     public Dictionary<string,object?> Values {get;set;} = new();
     public List<AttributeDefinition> Definitions {get;set;} = new();
@@ -34,9 +34,11 @@ public class EntityEngine
 
             if (val != null && val.GetType() != GetClrType(def.DataType))
                 throw new Exception($"Attribute '{def.Slug}' has invalid type. Expected {GetClrType(def.DataType).Name}, got {val.GetType().Name}.");
+            
+            
 
-            if (def.IsEnum && def.EnumOptions != null && !def.EnumOptions.Contains(val?.ToString()?? string.Empty))
-                throw new Exception($"'{val}' is not a valid enum value for '{def.Slug}'.");
+            // if (def.IsEnum && def.EnumOptions != null && !def.EnumOptions.Contains(val?.ToString()?? string.Empty))
+            //     throw new Exception($"'{val}' is not a valid enum value for '{def.Slug}'.");
         
 
         }

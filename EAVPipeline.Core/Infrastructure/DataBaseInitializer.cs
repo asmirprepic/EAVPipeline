@@ -18,12 +18,7 @@ public static class DataBaseInitializer {
         
         );
 
-        CREATE TABLE IF NOT EXISTS AttributeEnumOptions (
-            OptionId INTEGER PRIMARY KEY AUTOINCREMENT,
-            AttributeId INTEGER NOT NULL,
-            Value TEXT NOT NULL,
-            FOREIGN KEY (AttributeId) REFERENCES AttributeDefinitions(AttributeId)
-        );
+        
 
         CREATE TABLE IF NOT EXISTS AttributeValues (
         Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,6 +27,17 @@ public static class DataBaseInitializer {
         Value TEXT, 
         ArchivedAt TEXT,
         FOREIGN KEY (AttributeId) References AttributeDefinitions (AttributeId)
+        );
+        
+         CREATE TABLE IF NOT EXISTS MasterEntities (
+            EntityId INTEGER PRIMARY KEY,
+            Name TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS RawInputData (
+            EntityId INTEGER NOT NULL,
+            PropertyKey TEXT NOT NULL,
+            PropertyValue TEXT NOT NULL
         );
         ";
         command.ExecuteNonQuery();

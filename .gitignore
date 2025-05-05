@@ -405,6 +405,7 @@ FodyWeavers.xsd
 .idea/
 
 *.sln
+*.db
 ##
 ## Visual studio for Mac
 ##

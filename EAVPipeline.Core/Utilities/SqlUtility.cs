@@ -9,13 +9,13 @@ public static class SqlUtility{
         Console.WriteLine("[SQL EXECUTED] " + sql);
     }
 
-    public static IENumerable<T> Query<T>(IDbConnection connection, string sql, object? paramters=null){
+    public static IEnumerable<T> Query<T>(IDbConnection connection, string sql, object? parameters=null){
         return connection.Query<T>(sql,parameters);
     }
 
     public static void PrintQueryResults(IDbConnection connection,string sql, object? parameters = null){
         var rows = connection.Query(sql,parameters);
-        foreach (var in rows) {
+        foreach (var row in rows) {
             Console.WriteLine(string.Join(" | ",((IDictionary<string,object>) row).Select(kv => $"{kv.Key}: {kv.Value}")));
         }
     }

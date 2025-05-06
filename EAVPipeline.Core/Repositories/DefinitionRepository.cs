@@ -1,11 +1,11 @@
-using System.Data.SQLite;
+using System.Data;
 using Dapper;
 using EAVPipeline.Core.Models;
 
 namespace EAVPipeline.Core.Repositories;
 
 public static class DefinitionRepository{
-  public static void InsertDefinitionIfMissing(SQLiteConnection connection,AttributeDefinition def){
+  public static void InsertDefinitionIfMissing(IDbConnection connection,AttributeDefinition def){
     int exists = connection.ExecuteScalar<int>(
         "SELECT COUNT(*) FROM AttributeDefinitions WHERE Slug = @Slug",
         new {def.Slug} );
@@ -18,10 +18,10 @@ public static class DefinitionRepository{
     }
   }
 
-  public static int GetAttributeIdBySlug(SQLiteConnection connection, string slug) =>
+  public static int GetAttributeIdBySlug(IDbConnection connection, string slug) =>
   connection.QueryFirst<int>("SELECT AttributeId FROM AttributeDefinitions WHERE Slug = @slug",new {slug}  );
 
-  public static void InsertEnumOptionIfMissing(SQLiteConnection connection,int attributeId,string value){
+  public static void InsertEnumOptionIfMissing(IDbConnection connection,int attributeId,string value){
     int exists = connection.ExecuteScalar<int>(
         "SELECT COUNT(*) FROM AttributeEnumOptions WHERE AttributeId = @AttributeId AND Value = @Value",
         new {AttributeId = attributeId,Value= value})  ;
@@ -33,10 +33,10 @@ public static class DefinitionRepository{
     }
   }
 
-  public static List<AttributeDefinition> LoadDefinitions(SQLiteConnection connection) =>
+  public static List<AttributeDefinition> LoadDefinitions(IDbConnection connection) =>
     connection.Query<AttributeDefinition>("SELECT * FROM AttributeDefinitions").ToList();
 
-  public static List<AttributeEnumOption> LoadEnumOptions(SQLiteConnection connection) =>
+  public static List<AttributeEnumOption> LoadEnumOptions(IDbConnection connection) =>
     connection.Query<AttributeEnumOption>("SELECT * FROM AttributeEnumOptions").ToList();
 
 }

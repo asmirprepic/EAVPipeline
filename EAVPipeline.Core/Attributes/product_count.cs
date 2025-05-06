@@ -1,7 +1,7 @@
-using System.Data:
+using System.Data;
 using Dapper;
 using EAVPipeline.Core.Models;
-using EABPipeline.Core.Repositories;
+using EAVPipeline.Core.Repositories;
 
 namespace EAVPipeline.Core.Attributes;
 
@@ -10,9 +10,9 @@ public class product_count{
 
         var attr = new AttributeDefinition {
             Slug = "product_count",
-            DisplayName = 'Product Count',
+            DisplayName = "Product Count",
             DataType = AttributeDataType.Integer,
-            Requried = false,
+            Required = false,
             IsEnum = false
         };
 
@@ -22,8 +22,7 @@ public class product_count{
         var counts = connection.Query<(int EntityId,int Count)>(
             @"SELECT EntityId, COUNT(*) as Count
             FROM RawInputData
-            WHERE PropertyKey = 'product_id'
-            GROUP BY EntityId").ToDictionary(x => x.Entity_Id,x=>x.Count);
+            GROUP BY EntityId").ToDictionary(x => x.EntityId,x=>x.Count);
         var allEntities = connection.Query<int>("SELECT EntityId FROM MasterEntities");
 
         using var tx = connection.BeginTransaction();

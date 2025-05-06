@@ -19,7 +19,6 @@ public static class DataBaseInitializer {
         );
 
         
-
         CREATE TABLE IF NOT EXISTS AttributeValues (
         Id INTEGER PRIMARY KEY AUTOINCREMENT,
         AttributeId INTEGER NOT NULL,

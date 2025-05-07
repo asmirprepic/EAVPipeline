@@ -484,5 +484,8 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+*.db
+*.db_journal
+eav.db-journal
 eav.db
 eav.db

@@ -13,14 +13,14 @@ public static class EntitySimulator{
             new {EntityId  = i, Name = $"Entity_{i}"},transaction);
         
 
-            for (int j = 0;j < propertiesPerEntity; j++){
-                string key = $"property_{j+1}";
-                string value = $"val_{rnd.Next(1,100)}";
+            // for (int j = 0;j < propertiesPerEntity; j++){
+            //     string key = $"property_{j+1}";
+            //     string value = $"val_{rnd.Next(1,100)}";
 
-                connection.Execute("INSERT INTO RawInputData (EntityId,PropertyKey,PropertyValue) VALUES (@EntityId,@PropertyKey,@PropertyValue)",
-                new {EntityId = i, PropertyKey = key, PropertyValue  = value},transaction
-                );
-            }
+            //     connection.Execute("INSERT INTO RawInputData (EntityId,PropertyKey,PropertyValue) VALUES (@EntityId,@PropertyKey,@PropertyValue)",
+            //     new {EntityId = i, PropertyKey = key, PropertyValue  = value},transaction
+            //     );
+            // }
     }
     transaction.Commit();
     Console.WriteLine("[INFO] Seeding complete.");

@@ -1,6 +1,6 @@
 # EAVPipeline
 
-EAVPipeline is a project within the `csharp-practice` repository. It is designed to handle Entity-Attribute-Value (EAV) data pipelines, providing functionality for managing, processing, and analyzing EAV data structures.
+Designed to handle Entity-Attribute-Value (EAV) data pipelines, providing functionality for managing, processing, and analyzing EAV data structures.
 
 ## Features
 

@@ -32,7 +32,6 @@ EAVPipeline/
 
 * `MasterEntities (EntityId, Name)` — main list of customers
 * `Products (ProductId, Name, Category, BasePrice, ReleaseYear)`
-* `RawInputData (EntityId, PropertyKey, PropertyValue)` — raw wide-table style
 * `AttributeDefinitions (AttributeId, Slug, ...)`
 * `AttributeValues (EntityId, AttributeId, Value, ArchivedAt)` — core EAV store
 
